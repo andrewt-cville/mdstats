@@ -43,10 +43,10 @@ def buildGame(gameSoup,url):
 
 def createSummarySoup(gameId):
 	url = 'http://www.espn.com/mens-college-basketball/game?gameId=' + str(gameId)
-	#r = requests.get(url)
+	r = requests.get(url)
 	#print(r.status_code)
 	#only_td_tags = SoupStrainer("td")
-	summarySoup = BeautifulSoup(sample_summary, 'lxml')
+	summarySoup = BeautifulSoup(r.text, 'lxml')
 	return summarySoup
 
 def getGameId(url):
