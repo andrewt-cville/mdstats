@@ -4,7 +4,6 @@ import requests
 import lxml	
 import mysql.connector
 from mysql.connector import errorcode
-from sample_summary import sample_summary
 
 def create_game(conn, game):
 	"""

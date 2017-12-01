@@ -61,7 +61,7 @@ TABLES['c_players'] = (
     "     REFERENCES `teams` (`keyteam`) ON DELETE CASCADE"
     ") ENGINE=InnoDB")
 
-TABLES['d_gamestats'] = (
+TABLES['j_gamestats'] = (
     "CREATE TABLE `gamestats` ("
     "  `keygamestats` int(10) NOT NULL AUTO_INCREMENT,"
     "  `keygame` int(20) NOT NULL,"
@@ -87,34 +87,19 @@ TABLES['d_gamestats'] = (
     "  CONSTRAINT `gamestats_ibfk_1` FOREIGN KEY (`keygame`) "
     "     REFERENCES `games` (`keygame`) ON DELETE CASCADE,"
     "  CONSTRAINT `gamestats_ibfk_2` FOREIGN KEY (`keyplayer`) "
-    "     REFERENCES `players` (`keyplayer`) ON DELETE CASCADE"
+    "     REFERENCES `players` (`keyplayer`) ON DELETE CASCADE,"
+    "  INDEX `unique_gamestats1` (`keygame`, `keyplayer`) "
     ") ENGINE=InnoDB")
-# 
-# TABLES['dept_manager'] = (
-#     "  CREATE TABLE `dept_manager` ("
-#     "  `dept_no` char(4) NOT NULL,"
-#     "  `emp_no` int(11) NOT NULL,"
-#     "  `from_date` date NOT NULL,"
-#     "  `to_date` date NOT NULL,"
-#     "  PRIMARY KEY (`emp_no`,`dept_no`),"
-#     "  KEY `emp_no` (`emp_no`),"
-#     "  KEY `dept_no` (`dept_no`),"
-#     "  CONSTRAINT `dept_manager_ibfk_1` FOREIGN KEY (`emp_no`) "
-#     "     REFERENCES `employees` (`emp_no`) ON DELETE CASCADE,"
-#     "  CONSTRAINT `dept_manager_ibfk_2` FOREIGN KEY (`dept_no`) "
-#     "     REFERENCES `departments` (`dept_no`) ON DELETE CASCADE"
-#     ") ENGINE=InnoDB")
-# 
-# TABLES['titles'] = (
-#     "CREATE TABLE `titles` ("
-#     "  `emp_no` int(11) NOT NULL,"
-#     "  `title` varchar(50) NOT NULL,"
-#     "  `from_date` date NOT NULL,"
-#     "  `to_date` date DEFAULT NULL,"
-#     "  PRIMARY KEY (`emp_no`,`title`,`from_date`), KEY `emp_no` (`emp_no`),"
-#     "  CONSTRAINT `titles_ibfk_1` FOREIGN KEY (`emp_no`)"
-#     "     REFERENCES `employees` (`emp_no`) ON DELETE CASCADE"
-#     ") ENGINE=InnoDB")
+# need to figure out the proper syntax for the create
+# StoredProc['playergamestats'] = (
+# 	"CREATE PROCEDURE `mdstats`.`GetPlayerGameStats`(IN keyplayer_val INT)"
+# 	"BEGIN "
+# 	"select a.keygame, b.teamshort, a.points, d.gametime "
+# 	"from gamestats a "
+# 	"left join games d on a.Keygame = d.keygame "
+# 	" left join teams b on (d.Keyhometeam = b.KeyTeam and d.Keyhometeam <> 120) or (d.keyawayteam = b.KeyTeam and d.keyawayteam <>120) "
+# 	"where a.keyplayer = (keyplayer_val) order by d.gametime asc"
+# 	"END")
   
 cursor = cnx.cursor()
 
