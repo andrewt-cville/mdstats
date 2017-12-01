@@ -45,7 +45,6 @@ def createSummarySoup(gameId):
 	url = 'http://www.espn.com/mens-college-basketball/game?gameId=' + str(gameId)
 	r = requests.get(url)
 	#print(r.status_code)
-	#only_td_tags = SoupStrainer("td")
 	summarySoup = BeautifulSoup(r.text, 'lxml')
 	return summarySoup
 
@@ -73,7 +72,11 @@ def getSummaryLocation(gameId):
 	summarySoup = createSummarySoup(gameId)
 	locationTag = summarySoup.find("div", class_="location-details")
 	location = locationTag.li.span
-	return int(filter(unicode.isdigit, location.contents[0].strip()))
+	noLocation = 99999
+	if (location.contents[0].isspace()):
+		return noLocation
+	else:
+		return int(filter(unicode.isdigit, location.contents[0].strip()))
 	#return int(filter(str.isdigit, location.contents))
 	
 	
