@@ -2,20 +2,30 @@
 include('dbphpconnect.php');
 
 $keyplayer = htmlspecialchars($_GET["playerid"]);
-$sql = "Call GetPlayerGameStats(" . $keyplayer . ")";
-$result = $conn->query($sql);
+#$sqlHeader = "Call GetPlayerHeader(". $keyplayer . ")";
+$sql = "Call GetPlayerGameStats(" . $keyplayer . ");";
+$sql .= "Call GetPlayerHeader(" . $keyplayer . ");";
 
-if ($result-> num_rows == 0) {
-	echo 'No results from db.';
-}
 $outp = [];
-while($row = $result->fetch_assoc()) {
-	$outp[] = ['keygame'=>(int)$row['keygame'], 'opponent'=>$row['teamshort'], 'gametime'=>$row['gametime'], 'points'=>(int)$row['points']];
+$header = [];
+if (mysqli_multi_query($conn, $sql)) {
+	do {
+		
+		if ($result=mysqli_store_result($conn)) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				if (isset($row['keygame'])) {	
+					$outp[] = ['keygame'=>(int)$row['keygame'], 'opponent'=>$row['teamshort'], 'gametime'=>$row['gametime'], 'points'=>(int)$row['points']];				
+				}
+				if (isset($row['name'])) {
+					$header[] = ['name'=>$row['name'], 'teamlong'=>$row['teamlong'], 'recentyear'=>(int)$row['recentyear'], 'firstyear'=>(int)$row['firstyear']];
+				}				
+			}
+			mysqli_free_result($result);
+		}
+	}
+	while (mysqli_next_result($conn));
 }
-
-// $first = reset($outp);
-// print_r($first);
-// echo json_encode($outp);
+$playerHeaderArray = (array)$header;
 
 ?>
 <!DOCTYPE html>
@@ -49,6 +59,7 @@ while($row = $result->fetch_assoc()) {
 </head>
 <body>
 	<!--<div class="chart"></div>-->
+	<h1><?php echo $playerHeaderArray[0]['name']; ?></h1>
 	<svg class="chart"></svg>
 <script>
 var data = <?php echo json_encode($outp); ?>;

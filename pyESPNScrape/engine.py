@@ -8,7 +8,7 @@ from insert_game import getSummaryDateTime, getGameId, createSummarySoup, getTea
 from insert_player import buildPlayers, insertPlayers
 from insert_gameStats import buildGameStats, insertGameStats
 
-schedURL = 'http://www.espn.com/mens-college-basketball/team/schedule/_/id/120/year/2017'
+schedURL = 'http://www.espn.com/mens-college-basketball/team/schedule/_/id/120/year/2018'
 gameIds = getGameIds(schedURL)
 for x in range(len(gameIds)):
 	url = 'http://www.espn.com/mens-college-basketball/boxscore?gameId=' + str(gameIds[x])
