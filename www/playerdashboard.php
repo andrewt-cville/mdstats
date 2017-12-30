@@ -63,6 +63,18 @@ $playerHeaderArray = (array)$header;
 	<svg class="chart"></svg>
 <script>
 var data = <?php echo json_encode($outp); ?>;
+
+var avg = [];
+for (var i=0; i< data.length; i++) {
+	if (i = 0) {
+		avg.push(data.opponent[i]);
+	}
+	else {
+		for (var j=0; i - j > 0; j++) {
+			
+		}
+	}
+}
 /* Tutorial Part 1 Bar Chart HTML
 var x = d3.scaleLinear()
     .domain([0, d3.max(data)])
@@ -83,16 +95,19 @@ var margin = {top: 20, right: 30, bottom: 30, left: 40},
     height = 350 - margin.top - margin.bottom;
 
 var x = d3.scaleBand()
+	.domain(data.map(function(d) { return d.keygame; }))
     .rangeRound([0, width], .1);
 
 var y = d3.scaleLinear()
+	.domain([0, d3.max(data, function(d) { return d.points; })])
     .range([height, 0]);
     
 var xAxis = d3.axisBottom(x);
+	//.tickValues(function(d) { return d.keygame; });
 
 var yAxis = d3.axisLeft(y);
 
-
+var length = data.length;
 
 var chart = d3.select(".chart")
     .attr("width", width + margin.left + margin.right)
@@ -100,8 +115,7 @@ var chart = d3.select(".chart")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-x.domain(data.map(function(d) { return d.opponent; }));
-y.domain([0, d3.max(data, function(d) { return d.points; })]);
+
 
 chart.append("g")
   .attr("class", "x axis")
@@ -116,38 +130,11 @@ chart.selectAll(".bar")
   .data(data)
  .enter().append("rect")
   .attr("class", "bar")
-  .attr("x", function(d) { return x(d.opponent); })
+  .attr("x", function(d) { return x(d.keygame);  })
   .attr("y", function(d) { return y(d.points); })
   .attr("height", function(d) { return height - y(d.points); })
   .attr("width", x.bandwidth());
     
 </script>
-<!--
-<svg class="chart" width="420" height="120">
-  <g transform="translate(0,0)">
-    <rect width="40" height="19"></rect>
-    <text x="37" y="9.5" dy=".35em">4</text>
-  </g>
-  <g transform="translate(0,20)">
-    <rect width="80" height="19"></rect>
-    <text x="77" y="9.5" dy=".35em">8</text>
-  </g>
-  <g transform="translate(0,40)">
-    <rect width="150" height="19"></rect>
-    <text x="147" y="9.5" dy=".35em">15</text>
-  </g>
-  <g transform="translate(0,60)">
-    <rect width="160" height="19"></rect>
-    <text x="157" y="9.5" dy=".35em">16</text>
-  </g>
-  <g transform="translate(0,80)">
-    <rect width="230" height="19"></rect>
-    <text x="227" y="9.5" dy=".35em">23</text>
-  </g>
-  <g transform="translate(0,100)">
-    <rect width="420" height="19"></rect>
-    <text x="417" y="9.5" dy=".35em">42</text>
-  </g>
-</svg>-->
 </body>
 </html>

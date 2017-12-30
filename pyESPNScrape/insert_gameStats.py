@@ -42,6 +42,8 @@ def buildGameStats(gameSoup, url):
  		gameId = getGameId(url)
  		playerId = gameSoup.select(locVar[x][1] + " td.name a")
 		minutes = (gameSoup.select(locVar[x][1] + " td.min"))
+		if (minutes == '--'):
+			minutes = '99'
 		fg = (gameSoup.select(locVar[x][1] + " td.fg"))
 		three = (gameSoup.select(locVar[x][1] + " td.3pt"))
 		ft = (gameSoup.select(locVar[x][1] + " td.ft"))
@@ -60,7 +62,8 @@ def buildGameStats(gameSoup, url):
 			threeClean = (three[y].string).split("-")
 			ftClean = (ft[y].string).split("-")
 			gameStats.append([gameId,int(filter(str.isdigit,playerId[y].get('href'))), \
-				+ int(minutes[y].string), int(fgClean[0]), int(fgClean[1]), \
+				+ int(minutes[y].string) if (minutes[y].string != '--') else '99', \
+				+ int(fgClean[0]), int(fgClean[1]), \
 				+ int(threeClean[0]), int(threeClean[1]), int(ftClean[0]), \
 				+ int(ftClean[1]), int(oReb[y].string), int(dReb[y].string), int(reb[y].string), \
 				+ int(ast[y].string), int(stl[y].string), int(blk[y].string), int(to[y].string), int(pf[y].string), \

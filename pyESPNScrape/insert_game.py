@@ -70,12 +70,11 @@ def getSummaryDateTime(gameId):
 def getSummaryLocation(gameId):
 	summarySoup = createSummarySoup(gameId)
 	locationTag = summarySoup.find("div", class_="location-details")
-	location = locationTag.li.span
-	noLocation = 99999
-	if (location.contents[0].isspace()):
-		return noLocation
-	else:
+	if (locationTag.find("li.span")):
+		location = locationTag.li.span
 		return int(filter(unicode.isdigit, location.contents[0].strip()))
+	else:
+		return 99999
 	#return int(filter(str.isdigit, location.contents))
 	
 	
