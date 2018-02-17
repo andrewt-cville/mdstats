@@ -19,17 +19,17 @@ for x in range(len(gameIds)):
 
 
 	#add team info to db
-	insertTeam(buildTeam(gameSoup,0))
-	insertTeam(buildTeam(gameSoup,1))
+	insertTeam(buildTeam(gameSoup,0,gameIds[x]))
+	insertTeam(buildTeam(gameSoup,1,gameIds[x]))
 
 	# rootAwayCSS = "div.col.column-one.gamepackage-away-wrap"
-	playerArray = buildPlayers(gameSoup)
+	playerArray = buildPlayers(gameSoup,gameIds[x])
 
 	for y in range(0, len(playerArray)):
 		insertPlayers(playerArray[y])
 
 	#print(buildGame(gameSoup, url))
-	insertGame(buildGame(gameSoup, url))
+	insertGame(buildGame(gameSoup, url, gameIds[x]))
 
 	gameStatsArray = buildGameStats(gameSoup, url)
 	for y in range(0, len(gameStatsArray)):

@@ -33,9 +33,9 @@ def insertGame(game):
         # create a new project
         team_id = create_game(conn, game)
 
-def buildGame(gameSoup,url):
+def buildGame(gameSoup,url, gameId):
 	classVar = [ "home", "away"]
-	game =[getGameId(url), getTeamId(classVar[0], gameSoup), getTeamId(classVar[1], gameSoup), getSummaryDateTime(getGameId(url)), getSummaryLocation(getGameId(url))]
+	game =[getGameId(url), getTeamId(classVar[0], gameSoup, gameId), getTeamId(classVar[1], gameSoup, gameId), getSummaryDateTime(getGameId(url)), getSummaryLocation(getGameId(url))]
 	return game
 
 def createSummarySoup(gameId):
@@ -50,11 +50,15 @@ def getGameId(url):
 	gameId = int(''.join(filter(str.isdigit,url)))
 	return gameId
 
-def getTeamId(classVar, gameSoup):
+def getTeamId(classVar, gameSoup, gameId):
 	#espn team id
 	teamIdTag = gameSoup.find("div", class_="team " + classVar)
-	teamIdLinkTag = teamIdTag.find("a", class_="team-name")
-	teamId = int(''.join(filter(str.isdigit, teamIdLinkTag["href"])))
+	if teamIdTag.find("a", class_="team-name"):
+		teamIdLinkTag = teamIdTag.find("a", class_="team-name")
+		teamId = int(''.join(filter(str.isdigit, teamIdLinkTag["href"])))
+	else:
+		noIdTag = teamIdTag.find("div", class_="team-name")
+		teamId = gameId
 	return teamId
 
 def getSummaryDateTime(gameId):

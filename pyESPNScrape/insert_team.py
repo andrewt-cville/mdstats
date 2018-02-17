@@ -30,18 +30,25 @@ def insertTeam(team):
         # create a new project
         team_id = create_team(conn, team)
 
-def buildTeam(gameSoup,home):
+def buildTeam(gameSoup,home,gameId):
 	if home == 0:
 		classVar = "away"
 	else:
 		classVar = "home"
 
 	teamIdTag = gameSoup.find("div", class_="team " + classVar)
-	teamIdLinkTag = teamIdTag.find("a", class_="team-name")
-	teamId = int(''.join(filter(str.isdigit, teamIdLinkTag["href"])))
-	teamNames = (teamIdLinkTag.find("span", class_="long-name")).contents \
-		+ (teamIdLinkTag.find("span", class_="short-name")).contents \
-		+ (teamIdLinkTag.find("span", class_="abbrev")).contents
+	if teamIdTag.find("a", class_="team-name"):
+		teamIdLinkTag = teamIdTag.find("a", class_="team-name")
+		teamId = int(''.join(filter(str.isdigit, teamIdLinkTag["href"])))
+		teamNames = (teamIdLinkTag.find("span", class_="long-name")).contents \
+			+ (teamIdLinkTag.find("span", class_="short-name")).contents \
+			+ (teamIdLinkTag.find("span", class_="abbrev")).contents
+	else:
+		noIdTag = teamIdTag.find("div", class_="team-name")
+		teamId = gameId
+		teamNames = (noIdTag.find("span", class_="long-name")).contents \
+			+ (noIdTag.find("span", class_="short-name")).contents \
+			+ (noIdTag.find("span", class_="abbrev")).contents
 
 	teamArray = (teamId, str(teamNames[2]), str(teamNames[0]) + " " + str(teamNames[1]))
 	return teamArray

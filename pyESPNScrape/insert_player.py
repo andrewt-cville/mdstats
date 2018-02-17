@@ -34,7 +34,7 @@ def insertPlayers(players):
         # create a new project
         team_id = create_players(conn, players)
 
-def buildPlayers(gameSoup):
+def buildPlayers(gameSoup, gameId):
 
 	locVar = [["away", "div.col.column-one.gamepackage-away-wrap"], ["home", "div.col.column-two.gamepackage-home-wrap"]]
 	players = []
@@ -42,7 +42,7 @@ def buildPlayers(gameSoup):
 		playerId = gameSoup.select(locVar[x][1] + " td.name a")
 		name = gameSoup.select(locVar[x][1] + " td.name a span.abbr")
 		position = gameSoup.select(locVar[x][1] + " td.name span.position")
-		teamId = getTeamId(locVar[x][0], gameSoup)
+		teamId = getTeamId(locVar[x][0], gameSoup, gameId)
 		for y in range(0, len(playerId)):
 			#bookmark - need to get the teamid above and then iterate and create a list for each player
 			players.append([int(''.join(filter(str.isdigit,playerId[y].get('href')))), teamId, str(name[y].string), str(position[y].string)])
