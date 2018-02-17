@@ -100,7 +100,7 @@ TABLES['j_gamestats'] = (
 # 	" left join teams b on (d.Keyhometeam = b.KeyTeam and d.Keyhometeam <> 120) or (d.keyawayteam = b.KeyTeam and d.keyawayteam <>120) "
 # 	"where a.keyplayer = (keyplayer_val) order by d.gametime asc"
 # 	"END")
-  
+
 cursor = cnx.cursor()
 
 def create_database(cursor):
@@ -112,7 +112,7 @@ def create_database(cursor):
         exit(1)
 
 try:
-    cnx.database = DB_NAME  
+    cnx.database = DB_NAME
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_BAD_DB_ERROR:
         create_database(cursor)
@@ -121,7 +121,7 @@ except mysql.connector.Error as err:
         print(err)
         exit(1)
 
-for name, ddl in TABLES.iteritems():
+for name, ddl in TABLES.items():
     try:
         print("Creating table {}: ".format(name))
         cursor.execute(ddl)
@@ -135,4 +135,3 @@ for name, ddl in TABLES.iteritems():
 
 cursor.close()
 cnx.close()
-

@@ -22,21 +22,17 @@ for x in range(len(gameIds)):
 	insertTeam(buildTeam(gameSoup,0))
 	insertTeam(buildTeam(gameSoup,1))
 
-	# rootAwayCSS = "div.col.column-one.gamepackage-away-wrap"	
+	# rootAwayCSS = "div.col.column-one.gamepackage-away-wrap"
 	playerArray = buildPlayers(gameSoup)
-	# 
+
 	for y in range(0, len(playerArray)):
 		insertPlayers(playerArray[y])
-	
-	#print(bothRosters)
-	
+
 	#print(buildGame(gameSoup, url))
 	insertGame(buildGame(gameSoup, url))
-	
+
 	gameStatsArray = buildGameStats(gameSoup, url)
 	for y in range(0, len(gameStatsArray)):
 		insertGameStats(gameStatsArray[y])
-	
+
 	print('Finished Game #' + str(x))
-	
-	

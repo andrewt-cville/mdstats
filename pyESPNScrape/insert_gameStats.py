@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
-import lxml	
+import lxml
 from insert_game import getGameId
 import mysql.connector
 from mysql.connector import errorcode
 from connect_db import db_connector, config
-	
+
 def create_gameStats(conn, gameStats):
 	"""
 	Create a new project into the projects table
@@ -23,24 +23,23 @@ def create_gameStats(conn, gameStats):
 		conn.close()
 	except mysql.connector.Error as err:
 		print("Something went wrong: {}".format(err))
-		
+
 	return cur.lastrowid
-	
+
 def insertGameStats(gameStats):
- 
+
     # create a database connection
     conn = db_connector(config)
     if conn:
         # create a new project
         team_id = create_gameStats(conn, gameStats)
-        
-def buildGameStats(gameSoup, url):
 
- 	locVar = [["away", "div.col.column-one.gamepackage-away-wrap"], ["home", "div.col.column-two.gamepackage-home-wrap"]]
- 	gameStats = []
- 	for x in range(0, len(locVar)):
- 		gameId = getGameId(url)
- 		playerId = gameSoup.select(locVar[x][1] + " td.name a")
+def buildGameStats(gameSoup, url):
+	locVar = [["away", "div.col.column-one.gamepackage-away-wrap"], ["home", "div.col.column-two.gamepackage-home-wrap"]]
+	gameStats = []
+	for x in range(0, len(locVar)):
+		gameId = getGameId(url)
+		playerId = gameSoup.select(locVar[x][1] + " td.name a")
 		minutes = (gameSoup.select(locVar[x][1] + " td.min"))
 		if (minutes == '--'):
 			minutes = '99'
@@ -61,7 +60,7 @@ def buildGameStats(gameSoup, url):
 			fgClean = (fg[y].string).split("-")
 			threeClean = (three[y].string).split("-")
 			ftClean = (ft[y].string).split("-")
-			gameStats.append([gameId,int(filter(str.isdigit,playerId[y].get('href'))), \
+			gameStats.append([gameId,int(''.join(filter(str.isdigit,playerId[y].get('href')))), \
 				+ int(minutes[y].string) if (minutes[y].string != '--') else '99', \
 				+ int(fgClean[0]), int(fgClean[1]), \
 				+ int(threeClean[0]), int(threeClean[1]), int(ftClean[0]), \
@@ -69,5 +68,3 @@ def buildGameStats(gameSoup, url):
 				+ int(ast[y].string), int(stl[y].string), int(blk[y].string), int(to[y].string), int(pf[y].string), \
 				+ int(points[y].string)])
 	return gameStats
-
-

@@ -13,7 +13,7 @@ def getGameIds (url):
 
 	gameIds = []
 	for x in gameSoup.select('li.score a'):
-		gameIds.append(int(filter(str.isdigit, x.get('href'))))
-	
+		gameIds.append(int(''.join(filter(str.isdigit, x.get('href')))))
+
 	return gameIds
-#scheduleLinks = scheduleGrid.find_all('a', 
+#scheduleLinks = scheduleGrid.find_all('a',
