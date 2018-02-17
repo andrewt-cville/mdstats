@@ -74,7 +74,8 @@ def getSummaryLocation(gameId):
 	locationTag = summarySoup.find("div", class_="location-details")
 	if (locationTag.find("li.span")):
 		location = locationTag.li.span
-		return int(filter(unicode.isdigit, location.contents[0].strip()))
+		print(location)
+		return int(''.join(filter(str.isdigit, location.contents[0].strip())))
 	else:
 		return 99999
 	#return int(filter(str.isdigit, location.contents))
