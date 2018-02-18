@@ -34,6 +34,15 @@ def insertGameStats(gameStats):
         # create a new project
         team_id = create_gameStats(conn, gameStats)
 
+def processStat(x):
+
+	if (x == '--'):
+		return '99'
+	elif (x == '-----'):
+		return '99-99'
+	else:
+		return(x)
+
 def buildGameStats(gameSoup, url):
 	locVar = [["away", "div.col.column-one.gamepackage-away-wrap"], ["home", "div.col.column-two.gamepackage-home-wrap"]]
 	gameStats = []
@@ -57,14 +66,16 @@ def buildGameStats(gameSoup, url):
 		points = (gameSoup.select(locVar[x][1] + " td.pts"))
 		for y in range(0, len(playerId)):
 			#bookmark - need to get the teamid above and then iterate and create a list for each player
-			fgClean = (fg[y].string).split("-")
-			threeClean = (three[y].string).split("-")
-			ftClean = (ft[y].string).split("-")
+			fgClean = processStat((fg[y].string)).split("-")
+			threeClean = processStat((three[y].string)).split("-")
+			ftClean = processStat((ft[y].string)).split("-")
 			gameStats.append([gameId,int(''.join(filter(str.isdigit,playerId[y].get('href')))), \
 				+ int(minutes[y].string) if (minutes[y].string != '--') else '99', \
 				+ int(fgClean[0]), int(fgClean[1]), \
 				+ int(threeClean[0]), int(threeClean[1]), int(ftClean[0]), \
-				+ int(ftClean[1]), int(oReb[y].string), int(dReb[y].string), int(reb[y].string), \
-				+ int(ast[y].string), int(stl[y].string), int(blk[y].string), int(to[y].string), int(pf[y].string), \
-				+ int(points[y].string)])
+				+ int(ftClean[1]), int(processStat(oReb[y].string)), int(processStat(dReb[y].string)), \
+				+ int(processStat(reb[y].string)), \
+				+ int(processStat(ast[y].string)), int(processStat(stl[y].string)), int(processStat(blk[y].string)), \
+				+ int(processStat(to[y].string)), int(processStat(pf[y].string)), \
+				+ int(processStat(points[y].string))])
 	return gameStats
